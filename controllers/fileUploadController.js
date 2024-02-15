@@ -1,5 +1,5 @@
-const Receipt = require('../models/Receipt');
-const SpendingResolution = require('../models/SpendingResolution');
+// const Receipt = require('../models/Receipt');
+// const SpendingResolution = require('../models/SpendingResolution');
 
 const { uploadReceipt, uploadSpendingResolution } = require('../middleware/upload');
 

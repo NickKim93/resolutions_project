@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors');
 const credentials = require('./middleware/credentials');
 const corsOptions = require('./config/corsOptions');
-const connectDB = require('./config/dbConfig');
+const { connectDB } = require('./config/dbConfig');
 const PORT = process.env.PORT || 5500;
 
 app.use(credentials);

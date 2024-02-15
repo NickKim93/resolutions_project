@@ -1,10 +1,39 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/config');
 
-const spendingResolutionSchema = new Schema({
-  employee: { type: Schema.Types.ObjectId, ref: 'Employee', required: true },
-  uploadDate: { type: Date, default: Date.now },
-  fileUrl: { type: String, required: true } // URL to the file stored elsewhere
+class SpendingResolution extends Model {}
+
+SpendingResolution.init({
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  fileName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  employeeId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'employees', // This should match the table name
+      key: 'id'
+    }
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  modelName: 'SpendingResolution',
+  tableName: 'spending_resolutions'
 });
 
-module.exports = mongoose.model('SpendingResolution', spendingResolutionSchema);
+module.exports = SpendingResolution;

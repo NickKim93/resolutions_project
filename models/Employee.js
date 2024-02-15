@@ -1,16 +1,44 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../config/dbConfig');
 
-const employeeSchema = new Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    department: { type: Schema.Types.ObjectId, ref: 'Department', default: null },
-    // Files
-    receipts: [{ type: Schema.Types.ObjectId, ref: 'Receipt' }],
-    spendingResolutions: [{ type: Schema.Types.ObjectId, ref: 'SpendingResolution' }]
-})
+class Employee extends Model {}
 
+Employee.init({
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  modelName: 'Employee',
+  tableName: 'employees'
+});
 
-module.exports = mongoose.model('Employee', employeeSchema);
+module.exports = Employee;

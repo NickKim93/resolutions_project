@@ -1,10 +1,14 @@
-const Employee = require('../models/Employee');
+const Employee = require('../models/employee');
 const bcrypt = require('bcrypt');
 
 const getAllEmployees = async (req, res) => {
-    const employees = await Employee.find();
-    if (!employees) return res.status(204).json({"message": "No employees found"});
-    res.json(employees);
+    try {
+        const employees = await Employee.findAll();
+        if (employees.length === 0) return res.status(204).json({"message": "No employees found"});
+        res.json(employees);
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
 }
 
 const createNewEmployee = async (req, res) => {
@@ -15,39 +19,42 @@ const createNewEmployee = async (req, res) => {
 
     try {
         const hashedPwd = await bcrypt.hash(req.body.password, 10);
-        const result = await Employee.create({
+        const newEmployee = await Employee.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             username: req.body.username,
             password: hashedPwd
         });
-        res.status(201).json(result);
+        res.status(201).json(newEmployee);
     } catch (err) {
         console.log(err);
+        res.status(500).json({message: err.message});
     }
 }
 
 const updateEmployee = async (req, res) => {
 
-    if (!req?.body?.id) {
+    const { id, password, ...otherFields} = req.body;
+
+    if (!id) {
         return res.status(400).json({"message": "ID parameter is required"});
     }
-    const employee = await Employee.findOne({_id: req.body.id}).exec();
-    if (!employee) {
-        return res.status(204).json({"message": `No Employee matches with ${req.body.id}`});
-    }
-
-    const updatableFields = ['firstName', 'lastName', 'password', 'department', 'receipts', 'spendingResolutions'];
-    Object.keys(req.body).forEach(key => {
-        if (updatableFields.includes(key)) {
-            employee[key] = req.body[key];
-        }
-    });
 
     try {
-        const result = await employee.save();
-        res.json(result);
-    } catch (error) {
+        let updatedFields = otherFields;
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updatedFields = { ...otherFields, password: hashedPassword};
+        }
+        const [updateCount] = await Employee.update(updatedFields, {
+            where: {id: id},
+        });
+
+        if (updateCount === 0)  {
+            return res.status(404).json({"message": `No Employee matches with ${id}`});
+        }
+        res.json({"message": `Employee with ${id} updated successfully`});
+    } catch (err)  {
         res.status(500).json({"message": "An error occurred while updating the employee."});
     }
 }
@@ -56,12 +63,17 @@ const deleteEmployee = async (req, res) => {
     if (!req?.body?.id) {
         return res.status(400).json({"message": "ID parameter is required"});
     }
-    const employee = await Employee.findOne({_id: req.body.id}).exec();
-    if (!employee) {
-        return res.status(204).json({"message": `No Employee matches with ${req.body.id}`});
+    try {
+        const employee = await Employee.destroy({
+            where: { id: req.body.id}
+        });
+        if (employee === 0) {
+            return res.status(404).json({"message": `No Employee matches with ${req.body.id}`});
+        };
+        res.json({"message": `Employee with id ${req.body.id} was deleted`});
+    } catch (err) {
+        res.status(500).json({"message": "An error occurred while deleting the employee."});
     }
-    const result = await Employee.deleteOne({_id: req.body.id});
-    res.json(result);
 }
 
 const getEmployee = async (req, res) => {
@@ -69,15 +81,12 @@ const getEmployee = async (req, res) => {
         return res.status(400).json({"message": "ID parameter is required"});
     }
     try {
-        const employee = await Employee.findOne({_id: req.params.id}).exec();
+        const employee = await Employee.findByPk(req.params.id);
         if (!employee) {
             return res.status(404).json({"message": `No Employee matches with ${req.params.id}`});
         }
         res.json(employee);
     } catch(err) {
-        if (err.name === 'CastError') {
-            return res.status(400).json({"message": "Invalid ID format"});
-        }
         console.error(err);
         res.status(500).json({"message": "Server error"});
     }
