@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 
 const getAllEmployees = async (req, res) => {
     try {
-        const employees = await Employee.findAll();
+        const employees = await Employee.findAll({
+            include: ['receipts', 'spendingResolutions']
+        });
         if (employees.length === 0) return res.status(204).json({"message": "No employees found"});
         res.json(employees);
     } catch (err) {
@@ -81,7 +83,9 @@ const getEmployee = async (req, res) => {
         return res.status(400).json({"message": "ID parameter is required"});
     }
     try {
-        const employee = await Employee.findByPk(req.params.id);
+        const employee = await Employee.findByPk(req.params.id, {
+            include: ['receipts', 'spendingResolutions']
+        });
         if (!employee) {
             return res.status(404).json({"message": `No Employee matches with ${req.params.id}`});
         }

@@ -18,7 +18,7 @@ SpendingResolution.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'employees', // This should match the table name
+      model: 'employees',
       key: 'id'
     }
   },
@@ -33,7 +33,7 @@ SpendingResolution.init({
 }, {
   sequelize,
   modelName: 'SpendingResolution',
-  tableName: 'spending_resolutions'
+  tableName: 'spendingResolutions'
 });
 
 module.exports = SpendingResolution;

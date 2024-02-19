@@ -8,7 +8,7 @@ module.exports = {
       firstName: 'John',
       lastName: 'Doe',
       username: 'johndoe',
-      password: '$2y$10$/XJC12MXdoDDxvCMW78ls.odQ2gT2ndwS0nnB4iiIeXC2BVtoT8ki',
+      password: '$2b$10$fgK/AP.vBI41MAoEEX4Z4unEIG/6NJ6Fri2VgViFwESjCm3QPCppO',
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -16,7 +16,7 @@ module.exports = {
       firstName: 'Alex',
       lastName: 'Brown',
       username: 'alexbrown',
-      password: '$2y$10$/XJC12MXdoDDxvCMW78ls.odQ2gT2ndwS0nnB4iiIeXC2BVtoT8ki',
+      password: '$2b$10$NX1LMeP0u.svGKTa.8GsseFzo6juqz.rLyxXaCLmp0OgXJZEgxSia',
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -24,7 +24,7 @@ module.exports = {
       firstName: 'Sam',
       lastName: 'Rock',
       username: 'samrock',
-      password: '$2y$10$/XJC12MXdoDDxvCMW78ls.odQ2gT2ndwS0nnB4iiIeXC2BVtoT8ki',
+      password: '$2b$10$NX1LMeP0u.svGKTa.8GsseFzo6juqz.rLyxXaCLmp0OgXJZEgxSia',
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -80,6 +80,22 @@ module.exports = {
     },
   ],
   {});
+
+  await queryInterface.bulkInsert('roles', [
+    { name: 'admin' },
+    { name: 'team leader' },
+    { name: 'tax agent' },
+    { name: 'employee' }
+  ],
+  {});
+
+  await queryInterface.bulkInsert('employeeRoles', [
+    { employeeId: 1, roleId: 1 },
+    { employeeId: 2, roleId: 2 },
+    { employeeId: 2, roleId: 4 },
+    { employeeId: 3, roleId: 4 },
+    ],
+    {});
 },
   async down (queryInterface, Sequelize) {
     /**

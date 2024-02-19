@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, Sequelize } = require('sequelize');
 const { sequelize } = require('../config/dbConfig');
 
 class Employee extends Model {}
@@ -26,6 +26,9 @@ Employee.init({
   password: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  refreshToken: {
+    type: Sequelize.STRING
   },
   createdAt: {
     type: DataTypes.DATE,

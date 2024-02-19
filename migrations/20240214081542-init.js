@@ -26,6 +26,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      refreshToken: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -89,6 +92,43 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      }
+    });
+
+    await queryInterface.createTable('roles', {
+      id: {
+        type: Sequelize.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      }
+    });
+
+   await queryInterface.createTable('employeeRoles', {
+      employeeId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'employees',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      roleId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'roles',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       }
     });
   },
