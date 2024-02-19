@@ -11,34 +11,39 @@ const uploadReceiptToLocalStorage = (req, res, next) => {
         console.log('err in uploadreceipt trigger');
         return res.status(500).json({ message: err.message });
     }
-    res.json({"message": "upload successful"});
-    // if (req.file) {
-    //   try {
-    //     const newReceipt = await Receipt.create({
-    //       fileName: req.file.fileName,
-    //       employeeId: req.file.employeeId
-    //     });
-    //     res.json({message: "upload successful", receipt: newReceipt});
-    //   } catch (dbError) {
-    //     console.log('Database error:', dbError);
-    //     return res.status(500).json({ message: dbError.message });
-    //   }
-    // } else {
-    //   res.status(400).json({ message: "No file uploaded." });
-    // }
+    try {
+      const employeeId = req.employeeId;
+      await Receipt.create({
+        fileName: req.file.filename,
+        employeeId: employeeId
+      });
+      res.json({"message": "upload successful"});
+    } catch (error) {
+      console.error('Error saving record in database:', error);
+      return res.status(500).json({ message: "Error saving record in database" });
+    }
   });
 };
 
 // Handler for uploading spending resolution Excel files
 const uploadSpendingResolutionToLocalStorage = (req, res, next) => {
   const upload = uploadSpendingResolution.single('spendingResolution');
-  upload(req, res, function(err) {
+  upload(req, res, async function(err) {
     if (err) {
         console.log('err in uploadSpendingResolutions trigger');
         return res.status(500).json({ message: err.message });
     }
-    res.json({"message": "upload successful"});
-    // Proceed with database saving logic here...
+    try {
+      const employeeId = req.employeeId;
+      await SpendingResolution.create({
+        fileName: req.file.filename,
+        employeeId: employeeId
+      });
+      res.json({"message": "upload successful"});
+    } catch (error) {
+      console.error('Error saving record in database:', error);
+      return res.status(500).json({ message: "Error saving record in database" });
+    }
   });
 };
 

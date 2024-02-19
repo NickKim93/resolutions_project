@@ -29,7 +29,14 @@ const excelFilter = (req, file, cb) => {
   }
 };
 
-const uploadReceipt = multer({storage: storage});
-const uploadSpendingResolution = multer({storage: storage});
+const uploadReceipt = multer({
+  storage: storage,
+  fileFilter: jpegFilter
+});
+
+const uploadSpendingResolution = multer({
+  storage: storage,
+  fileFilter: excelFilter
+});
 
 module.exports = { uploadReceipt, uploadSpendingResolution };
