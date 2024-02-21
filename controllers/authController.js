@@ -29,7 +29,7 @@ const handleLogin = async (req, res) => {
         foundEmployee.refreshToken = refreshToken;
         const result = await foundEmployee.save();
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
-        res.json({ accessToken });
+        res.json({ accessToken, employeeId: foundEmployee.id });
     } else {
         res.status(401).json({"message": "Password do not match"});
     }
