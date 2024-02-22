@@ -10,8 +10,8 @@ const cookieParser = require('cookie-parser');
 const { connectDB } = require('./config/dbConfig');
 const PORT = process.env.PORT || 5500;
 
+//credentials needed to be passed to cors. Always before cors
 app.use(credentials);
-
 app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded data

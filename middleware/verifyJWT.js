@@ -8,11 +8,18 @@ const verifyJWT = (req, res, next) => {
         token,
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
-            if (err) return res.sendStatus(403);
+            if (err) {
+                if (err.name === "TokenExpiredError") {
+                    return res.sendStatus(401);
+                } else {
+                    return res.sendStatus(403);
+                }
+            }
             req.user = decoded.EmployeeInfo.username;
             req.employeeId = decoded.EmployeeInfo.id;
             next();
         }
+        
     )
 }
 

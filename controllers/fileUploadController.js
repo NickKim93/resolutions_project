@@ -15,6 +15,7 @@ const uploadReceiptToLocalStorage = (req, res, next) => {
       const employeeId = req.employeeId;
       await Receipt.create({
         fileName: req.file.filename,
+        fileSize: req.file.size,
         employeeId: employeeId
       });
       res.json({"message": "upload successful"});
@@ -37,6 +38,7 @@ const uploadSpendingResolutionToLocalStorage = (req, res, next) => {
       const employeeId = req.employeeId;
       await SpendingResolution.create({
         fileName: req.file.filename,
+        fileSize: req.file.size,
         employeeId: employeeId
       });
       res.json({"message": "upload successful"});

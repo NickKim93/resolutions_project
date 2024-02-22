@@ -34,18 +34,21 @@ module.exports = {
   await queryInterface.bulkInsert('receipts', [
     {
       fileName: 'receipt1.jpeg',
+      fileSize: 300,
       employeeId: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       fileName: 'receipt2.jpeg',
+      fileSize: 200,
       employeeId: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       fileName: 'receipt3.jpeg',
+      fileSize: 1000,
       employeeId: 2,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -56,24 +59,28 @@ module.exports = {
   await queryInterface.bulkInsert('spendingResolutions', [
     {
       fileName: 'resolution1.xlxs',
+      fileSize: 100,
       employeeId: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       fileName: 'resolution2.xlxs',
+      fileSize: 200,
       employeeId: 2,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       fileName: 'resolution3.xlxs',
+      fileSize: 200,
       employeeId: 2,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       fileName: 'resolution4.xlxs',
+      fileSize: 500,
       employeeId: 3,
       createdAt: new Date(),
       updatedAt: new Date()

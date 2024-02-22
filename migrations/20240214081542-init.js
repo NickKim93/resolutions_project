@@ -49,6 +49,9 @@ module.exports = {
       fileName: {
         type: Sequelize.STRING
       },
+      fileSize: {
+        type: Sequelize.INTEGER
+      },
       employeeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -76,6 +79,9 @@ module.exports = {
       },
       fileName: {
         type: Sequelize.STRING
+      },
+      fileSize: {
+        type: Sequelize.INTEGER
       },
       employeeId: {
         type: Sequelize.INTEGER,

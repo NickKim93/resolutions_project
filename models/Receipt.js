@@ -14,6 +14,9 @@ Receipt.init({
     type: DataTypes.STRING,
     allowNull: false
   },
+  fileSize: {
+    type: DataTypes.INTEGER
+  },
   employeeId: {
     type: DataTypes.INTEGER,
     allowNull: false,
