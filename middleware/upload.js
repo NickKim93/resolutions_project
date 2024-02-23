@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, '../uploads')); // uploaded files folder
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    cb(null, path.parse(file.originalname).name + '-' + Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -29,14 +29,14 @@ const excelFilter = (req, file, cb) => {
   }
 };
 
-const uploadReceipt = multer({
+const uploadReceipts = multer({
   storage: storage,
   fileFilter: jpegFilter
-});
+}).array('receipts', 10);
 
 const uploadSpendingResolution = multer({
   storage: storage,
   fileFilter: excelFilter
-});
+}).single('spendingResolution');
 
-module.exports = { uploadReceipt, uploadSpendingResolution };
+module.exports = { uploadReceipts, uploadSpendingResolution };
