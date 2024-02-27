@@ -12,31 +12,31 @@ const storage = multer.diskStorage({
 });
 
 // File filter for JPEG files
-const jpegFilter = (req, file, cb) => {
-  if (file.mimetype === "image/jpeg") {
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" ||
+  file.mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+  file.mimetype === "application/vnd.ms-excel") {
     cb(null, true);
   } else {
-    cb(new Error("Only JPEG files are allowed!"), false);
+    cb(new Error("Only JPEG and Excel files are allowed!"), false);
   }
 };
 
-// File filter for Excel files
-const excelFilter = (req, file, cb) => {
-  if (file.mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || file.mimetype === "application/vnd.ms-excel") {
-    cb(null, true);
-  } else {
-    cb(new Error("Only Excel files are allowed!"), false);
-  }
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+}).any();
+
+const handleFileUpload = (req, res, next) => {
+  upload(req, res, function(err) {
+      if (err instanceof multer.MulterError) {
+          return res.status(500).json({ message: `Multer error: ${err.message}` });
+      } else if (err) {
+          return res.status(400).json({ message: `Upload error: ${err.message}` });
+      }
+      next();
+  });
 };
 
-const uploadReceipts = multer({
-  storage: storage,
-  fileFilter: jpegFilter
-}).array('receipts', 10);
 
-const uploadSpendingResolution = multer({
-  storage: storage,
-  fileFilter: excelFilter
-}).single('spendingResolution');
-
-module.exports = { uploadReceipts, uploadSpendingResolution };
+module.exports = { handleFileUpload };
