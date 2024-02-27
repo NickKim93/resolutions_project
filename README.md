@@ -12,9 +12,11 @@ DB_PORT=<your_port>
 DB_DATABASE=<your_db_name>
 
 // Setup for JWT (you can change the values if needed)
-ACCESS_TOKEN_SECRET=4b508f8fb85d280b35311b3a89bf7dfbb76c64c9acfd94761fd9548cb189e6e3db545f3c4492921958847cf80e7631d7fa2bb3d24388694f454f5ae77b060951
-REFRESH_TOKEN_SECRET=fbdaf420637e5a3b1423a8b1f1b04e9d160bb3adf0aa27d10c2645c80502d839b78a5e25927ad43690856fa8cc6f03cfda9bc73c42efceb1f950660d9e31351f
+ACCESS_TOKEN_SECRET=<your_access_token_secret>
+REFRESH_TOKEN_SECRET=<your_refresh_token_secret>
 
+// you can generate token secrets by using following commands in node command line ( to enter node terminal:  node in terminal): 
+// require('crypto').randomBytes(64).toString('hex');
 4) 루트에 uploads 폴더 생성합니다
 5) npm migrate (create schemas)
 6) npm seed (put data inside tables, if required)
