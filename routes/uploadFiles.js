@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const fileUploadController = require('../controllers/fileUploadController');
+const fileController = require('../controllers/fileController');
 const { handleFileUpload } = require('../middleware/upload');
 
 
-router.post('/', handleFileUpload, fileUploadController.uploadFileToLocalStorage);
+router.post('/upload', handleFileUpload, fileController.uploadFileToLocalStorage);
+router.get('/download/:fileName', fileController.downloadFileFromLocalStorage);
 
 module.exports = router;

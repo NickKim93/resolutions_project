@@ -1,4 +1,6 @@
 const Receipt = require('../models/receipt');
+const fs = require('fs');
+const path = require('path');
 const SpendingResolution = require('../models/spendingResolution');
 
 // Handler for uploading receipt JPEG files
@@ -47,4 +49,19 @@ const uploadFileToLocalStorage = async (req, res) => {
   };
 };
 
-module.exports = { uploadFileToLocalStorage };
+const downloadFileFromLocalStorage = async (req,res) => {
+  const {fileName} = req.params;
+  const filePath = path.join(__dirname,'../uploads', fileName);
+
+  if (fs.existsSync(filePath)) {
+    res.download(filePath, fileName, (err) => {
+      if (err) {
+        res.status(500).send('Error downloading file')
+      }
+    })
+  } else {
+    res.status(404).send("file not found.");
+  }
+}
+
+module.exports = { uploadFileToLocalStorage, downloadFileFromLocalStorage };
