@@ -25,7 +25,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use(verifyJWT);
 app.use('/employees', require('./routes/employee'));
-app.use('/upload', require('./routes/uploadFiles'));
+app.use('/', require('./routes/uploadFiles'));
 
 connectDB().then(() => {
     console.log('Connected to DB');

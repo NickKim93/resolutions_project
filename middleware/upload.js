@@ -7,7 +7,13 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, '../uploads')); // uploaded files folder
   },
   filename: function (req, file, cb) {
-    cb(null, path.parse(file.originalname).name + '-' + Date.now() + path.extname(file.originalname));
+    const now = new Date();
+    const year = now.getFullYear().toString();
+    const month = ('0' + (now.getMonth() + 1)).slice(-2);
+    const day = ('0' + now.getDate()).slice(-2);
+    
+    const formattedDate = year + month + day;
+    cb(null, path.parse(file.originalname).name + '-' + formattedDate + path.extname(file.originalname));
   }
 });
 
