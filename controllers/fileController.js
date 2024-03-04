@@ -49,9 +49,9 @@ const uploadFileToLocalStorage = async (req, res) => {
   };
 };
 
-const downloadFileFromLocalStorage = async (req,res) => {
-  const {fileName} = req.params;
-  const filePath = path.join(__dirname,'../uploads', fileName);
+const downloadFileFromLocalStorage = async (req, res) => {
+  const { fileName } = req.params;
+  const filePath = path.join(__dirname, '../uploads', fileName);
 
   if (fs.existsSync(filePath)) {
     res.download(filePath, fileName, (err) => {
@@ -64,4 +64,43 @@ const downloadFileFromLocalStorage = async (req,res) => {
   }
 }
 
-module.exports = { uploadFileToLocalStorage, downloadFileFromLocalStorage };
+const deleteFile = async (req, res) => {
+  const fileName = req.body.fileName;
+  const employeeId = req.body.employeeId;
+
+  if (!fileName) {
+    return res.status(400).json({ "message": "Filename parameter is required" });
+  }
+
+  const filePath = path.join(__dirname, '../uploads', fileName);
+
+  try {
+    const fileRecord = await Receipt.findOne({ where: { fileName, employeeId } }) ||
+      await SpendingResolution.findOne({ where: { fileName, employeeId } });
+    if (!fileRecord) {
+      return res.status(404).json({ "message": "file not found in database" });
+    }
+    const fileUpdatedAt = new Date(fileRecord.updatedAt);
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 2, 1);
+
+    if (fileUpdatedAt < startOfMonth || fileUpdatedAt > endOfMonth) {
+      return res.status(403).json({ "message": "Files can only be deleted within current month" });
+    }
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    } else {
+      console.warn("file not found in the file system, proceeding to remove database record.");
+    }
+
+    await fileRecord.destroy();
+    res.status(200).json({ "message": "File and its record successfully deleted" });
+  } catch (err) {
+    res.status(500).json({ "message": err });
+  }
+
+}
+
+module.exports = { uploadFileToLocalStorage, downloadFileFromLocalStorage, deleteFile };
