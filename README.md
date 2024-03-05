@@ -20,4 +20,5 @@ REFRESH_TOKEN_SECRET=<your_refresh_token_secret>
 4) 루트에 uploads 폴더 생성합니다
 5) npm run migrate (create schemas)
 6) npm run seed (put data inside tables, if required)
-7) npm start (프로젝트를 시작합니다)
+7) npm start (프로젝트를 시작합니다) 
+   모든 사용자의 암호는 "user"입니다
